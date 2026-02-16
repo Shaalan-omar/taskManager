@@ -1,0 +1,3 @@
+* I do not add @builder to the request DTOs as I am not gonna build anything to return
+    ** I just validate how I want to receive my requests
+* We use @Builder with the response DTOs so I can build the response being sent through the DTO

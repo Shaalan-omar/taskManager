@@ -1,0 +1,12 @@
+*When we make a custom exception for entity not being founc we extend runtime exception class as an entity will never fail to be found in compile time
+
+
+*In Java, super(...) is a call to the parent class constructor.
+
+ UserNotFoundException extends RuntimeException.
+ RuntimeException has a constructor that accepts a String message.
+ By calling super("User not found with id: " + id);, you are passing that message up to the RuntimeException constructor.
+ This message is then stored in the exception and can be retrieved later with getMessage().
+
+
+
