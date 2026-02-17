@@ -13,6 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -20,26 +23,35 @@ import java.util.List;
 public class UserController {
     private final UserService userService; //Hateet anna henna ba2a el @RequiredArgsConstructor 3ashan el error el tele3 dah
 
-    @PreAuthorize("hasRole('TASK_WRITE')")
+//    @PreAuthorize("hasRole('TASK_WRITE')")
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(dto));
     }
 
-    @PreAuthorize("hasRole('TASK_READ')")
-    @RolesAllowed("ADMIN")
+    //@PreAuthorize("hasRole('TASK_READ')")
+    //@RolesAllowed("ADMIN")
     @GetMapping
-    public ResponseEntity<List<UserResponse>> list() {
-        return ResponseEntity.ok(userService.list());
+    public ResponseEntity<List<UserResponse>> list(Optional<String> name) {
+        return ResponseEntity.ok(userService.list(name));
     }
 
-    @PreAuthorize("hasRole('TASK_READ')")
+    @GetMapping("email")
+
+    public ResponseEntity<List<UserResponse>> listEmail(Optional<String> email)
+    {
+
+        return ResponseEntity.ok(userService.listEmail(email));
+    }
+
+
+    //@PreAuthorize("hasRole('TASK_READ')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(userService.get(id));
     }
 
-    @PreAuthorize("hasRole('TASK_WRITE')")
+   // @PreAuthorize("hasRole('TASK_WRITE')")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserRequest dto) {
         return ResponseEntity.ok(userService.update(id, dto));

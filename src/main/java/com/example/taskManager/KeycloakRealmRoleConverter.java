@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
+    //Translation lel rples el gayali men jwt to fit my application
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");

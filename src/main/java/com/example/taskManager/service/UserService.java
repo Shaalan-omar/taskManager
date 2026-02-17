@@ -7,9 +7,14 @@ import com.example.taskManager.exception.UserNotFoundException;
 import com.example.taskManager.model.User;
 import com.example.taskManager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 @RequiredArgsConstructor
 
@@ -35,7 +40,13 @@ public class UserService {
         User saved = userRepository.save(user);
         return toResponse(saved);
     }
-    public List<UserResponse> list(){
+    public List<UserResponse> list(Optional<String> name){
+
+        if(name.isPresent())
+        {
+            return userRepository.findByNameContainingIgnoreCase(name).stream().map(this::toResponse).collect(java.util.stream.Collectors.toList());
+
+        }
             return userRepository.findAll().stream().map(this::toResponse).collect(java.util.stream.Collectors.toList());
         }
 
@@ -61,4 +72,25 @@ public class UserService {
             User u = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
             userRepository.delete(u);
         }
-}
+
+    public List<UserResponse> listEmail( Optional<String> email) {
+
+        if(email.isPresent())
+        {
+            String par = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+            Pattern p = Pattern.compile(par);
+            Matcher m = p.matcher(email.get());
+            if (!m.matches()) {
+                throw new RuntimeException("Please verify that the email you are searching for is valid");
+            }
+
+//            while (m.find()) {
+//                throw new RuntimeException("Please verify that the email u are searching for is valid");
+//            }
+            return userRepository.findByEmailContainingIgnoreCase(email).stream().map(this::toResponse).collect(java.util.stream.Collectors.toList());
+
+        }
+        return userRepository.findAll().stream().map(this::toResponse).collect(java.util.stream.Collectors.toList());
+    }
+    }
+
