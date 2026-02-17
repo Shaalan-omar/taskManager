@@ -4,6 +4,7 @@ package com.example.taskManager.controller;
 import com.example.taskManager.dto.UserRequest;
 import com.example.taskManager.dto.UserResponse;
 import com.example.taskManager.service.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('TASK_READ')")
+    @RolesAllowed("ADMIN")
     @GetMapping
     public ResponseEntity<List<UserResponse>> list() {
         return ResponseEntity.ok(userService.list());
